@@ -19,7 +19,7 @@ void printDireccion(int indice)
     pasillo++; celda++; estante++; 
     std::cout<<"Pasillo: "<<pasillo<<endl<<"Estante: "<<estante<<endl<<"Celda: "<<celda<<endl;
     }
-    else std::cout<< "Caja"<<endl;
+    else std::cout<< "Caja (0,0,0)"<<endl;
 }
 void printIndice(int pasillo, int estante, int celda)
     {   
@@ -49,7 +49,7 @@ for(int i = 0; i<361; i++)
     }
 }
 //Primero las celdas del medio
-std::cout<<"Rellendndo las celdas centrales...";
+std::cout<<"Rellenando las celdas centrales...";
     for(int pasilloAux = 1; pasilloAux <= 8; pasilloAux++)
     {
         for(int estanteAux = 1; estanteAux < 4; estanteAux++)
@@ -63,7 +63,7 @@ std::cout<<"Rellendndo las celdas centrales...";
             }
         }
     }
-std::cout<<" \u2713 Listo"<<endl;std::cout<<"Rellendndo las celdas veritcales...";
+std::cout<<"  \u2713 Listo"<<endl;std::cout<<"Rellenando las celdas verticales...";
 //Luego las celdas verticales
     for(int pasilloAux = 2; pasilloAux <= 7; pasilloAux++)
     {
@@ -91,13 +91,13 @@ std::cout<<" \u2713 Listo"<<endl;std::cout<<"Rellendndo las celdas veritcales...
                 matrizAdyacente[l][l+45] = 4; matrizAdyacente[l+15][l+45] = 4;
                 matrizAdyacente[l][l-45] = 4; matrizAdyacente[l+15][l-45] = 4;
     }
-std::cout<<" \u2713 Listo"<<endl;std::cout<<"Rellendndo las esquinas externas...";
+std::cout<<" \u2713 Listo"<<endl;std::cout<<"Rellenando las esquinas externas...";
 //Luego las esquinas externas
     matrizAdyacente[0][1]=1; matrizAdyacente[0][45] = 4;              //Esq. Sup.Izq.
     matrizAdyacente[44][43] = 1; matrizAdyacente[44][89] = 4;         //Esq. Sup. Der.
     matrizAdyacente[315][316]= 1; matrizAdyacente[315][270] = 4;      //Esq. Inf. Izq.
     matrizAdyacente[359][358] = 1; matrizAdyacente[359][314] = 1;     //Esq. Inf. Der.
-std::cout<<" \u2713 Listo"<<endl;std::cout<<"Rellendndo las esquinas internas...";
+std::cout<<" \u2713 Listo"<<endl;std::cout<<"Rellenando las esquinas internas...";
 //Por ultimo las esquinas internas y caja
     matrizAdyacente[14][15]=4; matrizAdyacente[14][59] = 4; matrizAdyacente[14][13] = 1;
     matrizAdyacente[15][14]=4; matrizAdyacente[15][60] = 4; matrizAdyacente[15][16] = 1;
@@ -114,9 +114,9 @@ std::cout<<"Matriz de Adyacencia completada"<<endl;
 void hacerTxt()
 {   
     ofstream matrizCompleta("matrizCompleta.txt");
-    matrizCompleta<<"  j ";
+    matrizCompleta<<"i j ";
     for(int k = 0; k<361; k++){matrizCompleta<<setfill('0')<<setw(3)<<k<<" ";}
-    matrizCompleta<<"\ni  "<<endl;
+    matrizCompleta<<endl;
     for(int i = 0; i<361;i++)
     {   
         matrizCompleta <<setfill('0')<<setw(3)<<i<<" ";
@@ -136,6 +136,7 @@ int main()
 {
 rellenarMatrizAdyacencia();
 hacerTxt();
+printDireccion(360);
 
 }
 
