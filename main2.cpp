@@ -19,7 +19,7 @@ int main()
     printBasico();
 
 
-    //no tan comunes
+    //no tan comunes (verticales)
     for(int pasilloAux = 2; pasilloAux <= 7; pasilloAux++)
     {
 
@@ -47,10 +47,10 @@ int main()
                 matrizAdyacente[l][l-45] = 4; matrizAdyacente[l+15][l-45] = 4;
     }
     //las esquinas
-    matrizAdyacente[0][1]=1; matrizAdyacente[0][0+45]=4;
-    matrizAdyacente[44][43] = 1; matrizAdyacente[44][89]= 4;
-    matrizAdyacente[314][315]= 1; matrizAdyacente[314][269]=4;
-    matrizAdyacente[359][358] = 1; matrizAdyacente[359][314]=1;
+    matrizAdyacente[0][1]=1; matrizAdyacente[0][45] = 4;              //Esq. Sup.Izq.
+    matrizAdyacente[44][43] = 1; matrizAdyacente[44][89] = 4;         //Esq. Sup. Der.
+    matrizAdyacente[315][316]= 1; matrizAdyacente[315][270] = 4;      //Esq. Inf. Izq.
+    matrizAdyacente[359][358] = 1; matrizAdyacente[359][314] = 1;     //Esq. Inf. Der.
 
 
         hacerTxt();
