@@ -1,11 +1,23 @@
 #include <iostream>
+#include <cstdlib>
 #include "Direccion.hpp"
 #include "Pedido.hpp"
 #include <fstream>
 #include <iomanip>
 using namespace std;
-int matrizAdyacente[361][361];
+#define Alcance  361
+#define NO_MIEMBRO 0
+#define MIEMBRO 1
+int matrizAdyacente[Alcance][Alcance];
+char matrizMapa[Alcance];
 const int INFINITO = 1000000;
+void verif360()
+{
+    for(int i = 0; i<361;i++) 
+    {
+        if(i!=22 && matrizAdyacente[360][i]<INFINITO){cout<<"ojo "<<i<<endl;}
+    }
+}
 void printDireccion(int indice)
 {
     if(indice != 360)
@@ -17,7 +29,7 @@ void printDireccion(int indice)
     estante = (indice / 15) - pasillo * 3;
     celda = indice - pasillo * 45 - estante * 15;
     pasillo++; celda++; estante++; 
-    std::cout<<"Pasillo: "<<pasillo<<endl<<"Estante: "<<estante<<endl<<"Celda: "<<celda<<endl;
+    std::cout<<"Pasillo: "<<pasillo<<" "<<"Estante: "<<estante<<" "<<"Celda: "<<" "<<celda<<endl;
     }
     else std::cout<< "Caja (0,0,0)"<<endl;
 }
@@ -30,14 +42,14 @@ void printIndice(int pasillo, int estante, int celda)
     }
 int getIndice(int p, int e, int c)
 {
-    if(p,e,c!=0)
+    if(p!= 0 && e != 0 && c != 0 )
         return (p-1) * 45 + (e-1) * 15 + c - 1;
     else
         return 360;
 }
 void rellenarMatrizAdyacencia()
 {
-//Por defecto todo es indinito
+//Por defecto todo es infinito
 cout<<"Procediendo a la completitud de la matriz de Adyacencia"<<endl;
 for(int i = 0; i<361; i++)
 {
@@ -52,9 +64,9 @@ for(int i = 0; i<361; i++)
 std::cout<<"Rellenando las celdas centrales...";
     for(int pasilloAux = 1; pasilloAux <= 8; pasilloAux++)
     {
-        for(int estanteAux = 1; estanteAux < 4; estanteAux++)
+        for(int estanteAux = 1; estanteAux <= 3; estanteAux++)
         {
-            for(int gondolaAux = 2; gondolaAux < 15;gondolaAux++)
+            for(int gondolaAux = 2; gondolaAux <= 14;gondolaAux++)
             {   
                 int i = getIndice(pasilloAux,estanteAux,gondolaAux);
                 matrizAdyacente[i][i+1] = 1;
@@ -65,53 +77,31 @@ std::cout<<"Rellenando las celdas centrales...";
     }
 std::cout<<"  \u2713 Listo"<<endl;std::cout<<"Rellenando las celdas verticales...";
 //Luego las celdas verticales
-    for(int pasilloAux = 2; pasilloAux <= 7; pasilloAux++)
+for (int i = 1; i <= 8; i++)
+{
+    for (int j = 1; j <= 8; j++)
     {
-
-                int i = getIndice(pasilloAux,1,1);
-                int j = getIndice(pasilloAux,3,15);
-                int k = getIndice(pasilloAux,1,15);
-                int l = getIndice(pasilloAux,2,1);
-
-                matrizAdyacente[i][i+45] = 4;
-                matrizAdyacente[i][i+1] = 1;
-                matrizAdyacente[i][-45] = 4;
-
-                matrizAdyacente[j][j+45] = 4;
-                matrizAdyacente[j][j-1] = 1;
-                matrizAdyacente[j][j-45] = 4;
-
-                matrizAdyacente[k][k+1]= 4; matrizAdyacente[k+15][k+1]= 4;
-                matrizAdyacente[k][k+45] = 4; matrizAdyacente[k+15][k+45]= 4;
-                matrizAdyacente[k][k-45] = 4; matrizAdyacente[k+15][k-45] = 4;
-                matrizAdyacente[k][k-1]= 1; matrizAdyacente[k+15][k-1] = 1;
-
-                matrizAdyacente[l][l+1]= 1; matrizAdyacente[l+15][l+1]= 1;
-                matrizAdyacente[l][l-1]= 4; matrizAdyacente[l+15][l-1]= 4;
-                matrizAdyacente[l][l+45] = 4; matrizAdyacente[l+15][l+45] = 4;
-                matrizAdyacente[l][l-45] = 4; matrizAdyacente[l+15][l-45] = 4;
+     for (int k = 1; k<=3; k++)   
+        {   
+            if(i!=j)
+            {
+            matrizAdyacente[getIndice(i,k,1)][getIndice(j,k,1)]= 2*abs(j-i) + 2;
+            matrizAdyacente[getIndice(i,k,1)][getIndice(i,k,2)]=1;
+            matrizAdyacente[getIndice(i,k,15)][getIndice(i,k,14)]= 1;
+            if(k!=3)matrizAdyacente[getIndice(i,k,15)][getIndice(i,k+1,1)] = 3;
+            if(k!=1)matrizAdyacente[getIndice(i,k,1)][getIndice(i,k-1,15)] = 3;
+            matrizAdyacente[getIndice(i,k,15)][getIndice(j,k,15)]= 2 * abs(j-i) + 2;
+            }
+        }
     }
-std::cout<<" \u2713 Listo"<<endl;std::cout<<"Rellenando las esquinas externas...";
-//Luego las esquinas externas
-    matrizAdyacente[0][1]=1; matrizAdyacente[0][45] = 4;              //Esq. Sup.Izq.
-    matrizAdyacente[44][43] = 1; matrizAdyacente[44][89] = 4;         //Esq. Sup. Der.
-    matrizAdyacente[315][316]= 1; matrizAdyacente[315][270] = 4;      //Esq. Inf. Izq.
-    matrizAdyacente[359][358] = 1; matrizAdyacente[359][314] = 1;     //Esq. Inf. Der.
-std::cout<<" \u2713 Listo"<<endl;std::cout<<"Rellenando las esquinas internas...";
-//Por ultimo las esquinas internas y caja
-    matrizAdyacente[14][15]=4; matrizAdyacente[14][59] = 4; matrizAdyacente[14][13] = 1;
-    matrizAdyacente[15][14]=4; matrizAdyacente[15][60] = 4; matrizAdyacente[15][16] = 1;
-    matrizAdyacente[29][30]=4; matrizAdyacente[29][74] = 4; matrizAdyacente[29][28] = 1;
-    matrizAdyacente[30][29]=4; matrizAdyacente[30][75] = 4; matrizAdyacente[30][31] = 1;
-    matrizAdyacente[329][330]=4; matrizAdyacente[329][284] = 4; matrizAdyacente[329][328] = 1;
-    matrizAdyacente[330][329]=4; matrizAdyacente[330][285] = 4; matrizAdyacente[330][331] = 1;
-    matrizAdyacente[344][345]=4; matrizAdyacente[344][299] = 4; matrizAdyacente[344][343] = 1;
-    matrizAdyacente[345][344]=4; matrizAdyacente[345][300] = 4; matrizAdyacente[345][346] = 1;
-    matrizAdyacente[22][360]=4; matrizAdyacente[360][22]=4;
-std::cout<<" \u2713 Listo"<<endl;    
-std::cout<<"Matriz de Adyacencia completada"<<endl;
+    
 }
-void hacerTxt()
+//por ultimo la caja
+matrizAdyacente[360][22]=1;matrizAdyacente[22][360]=1;
+
+std::cout<<"  \u2713 Listo"<<endl;std::cout<<"Matriz de Adyacencia completada (ver matrizCompleta.txt)"<<endl;
+}
+void hacerTxtAdy()
 {   
     ofstream matrizCompleta("matrizCompleta.txt");
     matrizCompleta<<"i j ";
@@ -123,20 +113,150 @@ void hacerTxt()
         for(int j = 0; j<361; j++)
         {
         if(matrizAdyacente[i][j]<INFINITO)
-         matrizCompleta <<" "<< matrizAdyacente[i][j] <<"  ";
-        else
-         matrizCompleta << " \u221E " <<" ";  
+        {
+            if(matrizAdyacente[i][j]>9) matrizCompleta <<" "<< matrizAdyacente[i][j] <<" ";
+            else matrizCompleta <<" "<< matrizAdyacente[i][j] <<"  ";
         }
+        else
+         matrizCompleta << "   " <<" ";  
+        }// \u221E = inf
         matrizCompleta<<"\n";
     }
 }
+void hacerMapa()
+{
+//cada elemento de la matriz tendrá su propia leyenda. H sera las estanterias. V seran los casilleros disponibles
+for (int i = 0; i < 361; i++)
+{
+    matrizMapa[i] = 'V';
+}
+
+}
+void printMapa()
+{
+    //La caja
+    cout<<"\t\t\t";
+    switch(matrizMapa[360])
+    {
+        case 'V':
+            cout<<"\u25A3"<<endl;
+    }
+    //El resto
+    for(int i = 0; i < 360; i++)
+    {
+        switch (matrizMapa[i])
+        {
+        case 'V':
+            cout<<"\u25AD ";
+            break;
+        
+        default:
+            break;
+        }
+        if((i+1) % 15 == 0)
+            cout<<"  ";
+        if((i+1) %45 == 0)
+            cout<<"\n";
+        
+    }
+}
+void printDirecciones(int p,int e,int c)
+{
+    cout<<"La gondola ";
+    printDireccion(getIndice(p,e,c));
+    cout<<" esta relacionada con: "<<endl;
+    for(int i = 0;i<361;i++)
+    {
+        if(matrizAdyacente[getIndice(p,e,c)][i]< INFINITO && getIndice(p,e,c) != i)
+        {
+            printDireccion(i);
+            cout<<"con un peso de: "<<matrizAdyacente[getIndice(p,e,c)][i]<<endl;
+        }
+    }
+}
+void comprobarSimetria()
+{
+    bool simetria = true;
+    for (int i = 0; i < 361; i++)
+    {
+        for (int j = 0; j < 361; j++)
+        {
+            if(matrizAdyacente[i][j] != matrizAdyacente[j][i])
+            {
+                simetria = false;
+                cout<<"ojo con ";
+                printDireccion(j);
+                cout<<"que no coincide con ";printDireccion(i);
+                cout<<endl;
+            }
+            
+            
+        }
+        
+    }
+    if(simetria)cout<<"bien ahi"<<endl;
+    else cout<<"ojoalpiojo"<<endl;
+}
+void printSecuenciaCamino(int origen, int meta, int prev[Alcance])
+{
+     if (meta==origen) cout<< origen<<"  ";
+   else{
+        printSecuenciaCamino(origen,prev[meta],prev);
+        cout<<meta<<"  ";
+   }
+}
+int devuelveCamino(int origen, int meta)
+{
+    int actual, i, k, continua, menordist, nuevadist;
+    int previos[Alcance];
+    int costoPorIter[Alcance];
+    int visitados[Alcance];
+    for (int i = 0; i < Alcance; i++)
+    {
+        visitados[i]=NO_MIEMBRO;
+        previos[i] = -1;
+        costoPorIter[i]=INFINITO;
+    }
+    visitados[origen]= MIEMBRO; costoPorIter[origen]=0; actual = origen; continua=1; k=0;
+    while((actual != meta)&&(continua == 1))
+    {
+        continua = 0;
+        menordist = INFINITO;
+        for(i=0; i < Alcance; i++)
+        {
+            if(visitados[i] == NO_MIEMBRO)
+            {
+                nuevadist = costoPorIter[actual]+matrizAdyacente[actual][i];
+                if(nuevadist<costoPorIter[i])
+                {
+                    costoPorIter[i]=nuevadist;
+                    previos[i]=actual; continua=1;
+                }
+                if(costoPorIter[i]<menordist)
+                {
+                    menordist = costoPorIter[i];
+                    k=i; continua=1;
+                }
+            }
+        }
+        actual = k;
+        visitados[actual] = MIEMBRO;
+    }
+    printSecuenciaCamino(origen,meta, previos);
+    return costoPorIter[meta];
+}
+
+
+
+
 //La caja tiene direccion (0,0,0)
 
 int main()
 {
 rellenarMatrizAdyacencia();
-hacerTxt();
-printDireccion(360);
+hacerTxtAdy();
+
+cout<<devuelveCamino(getIndice(1,1,1),getIndice(8,3,15));
 
 }
 
