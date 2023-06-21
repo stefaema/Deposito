@@ -107,8 +107,16 @@ T Lista<T>::elemento(int indice)
 
 template <class T> 
 void Lista<T>::borrar(T elemento){
-    if(cabeza()==elemento) this->borrarCabeza();
+    if(this->cabeza() != NULL){
+        if(this->cabeza()==elemento){
+        Nodo<T>* aux = this->czo->get_next();
+        this->borrarCabeza();
+        this->czo = aux;
+        delete aux;
+    } 
     else resto()->borrar(elemento);
+    }
+    
 }
 
 template <class T> void Lista<T>::borrarCabeza(void)

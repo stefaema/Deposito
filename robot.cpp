@@ -56,7 +56,7 @@ class Robot
         int realizarPedidos()
         {
             //1ro comparar caja con todos los pedidos
-            //2do coparar pedido elegido con el resto
+            //2do comparar pedido elegido con el resto
             //repetir 2 hasta hacer todos
             //volver a la caja
 
@@ -65,11 +65,12 @@ class Robot
             Lista<Pedido*>* ordenRealizado;
             Lista<Pedido*>* pedidosPendientes = pedidos;
 
-            pedidoMasCercano(360, pedidos, costo);
+            Pedido *primerPedido = pedidoMasCercano(360, pedidos, costo);
 
-            // for (int i = 0; i < pedidos->size(); i++)
-            // {
-            // }
+            for (int i = 0; i < pedidos->size(); i++)
+            {
+                
+            }
             return *costo; 
         }
 

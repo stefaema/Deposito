@@ -142,8 +142,12 @@ int main()
     hacerTxtAdy();
     Lista<Pedido*>* lista_pedidos = new Lista<Pedido*>();
 
-    lista_pedidos->add(new Pedido(3,0));
-    lista_pedidos->add(new Pedido(5,1));
+    Pedido *pedido1 = new Pedido(3,0);
+    Pedido *pedido2 = new Pedido(5,1);
+
+    lista_pedidos->add(pedido1);
+    lista_pedidos->add(pedido2);
+    lista_pedidos->borrar(pedido2);
     // lista_pedidos->add(new Pedido(10,275));
     // lista_pedidos->add(new Pedido(1,10));
     // lista_pedidos->add(new Pedido(5,358));
