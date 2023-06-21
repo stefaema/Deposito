@@ -150,6 +150,6 @@ int main()
     // lista_pedidos->add(new Pedido(1,160));
     Robot* robot1 = new Robot(lista_pedidos, matrizAdyacente);
 
-    cout<<robot1->realizarPedidos();
+    cout<<robot1->realizarPedidos()<<" pasos fueron necesarios para completar el recorrido";
 }
 

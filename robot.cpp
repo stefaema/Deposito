@@ -60,20 +60,21 @@ class Robot
             //repetir 2 hasta hacer todos
             //volver a la caja
 
-            int costo = 0;
+            int *costo = new int();
+            *costo = 0;
             Lista<Pedido*>* ordenRealizado;
             Lista<Pedido*>* pedidosPendientes = pedidos;
 
-            pedidoMasCercano(360, pedidos, &costo);
+            pedidoMasCercano(360, pedidos, costo);
 
             // for (int i = 0; i < pedidos->size(); i++)
             // {
             // }
-            return costo; 
+            return *costo; 
         }
 
         //Devuelve el pedido que se encuentra mas cerca y actualiza el costo global
-        Pedido* pedidoMasCercano(int primerPedido, Lista<Pedido*>* pedidosPendientes,int* costoGlobal){
+        Pedido* pedidoMasCercano(int primerPedido, Lista<Pedido*>* pedidosPendientes,int *costoGlobal){
             
             Pedido* masCercano;
             int costo = INFINITO;
@@ -86,8 +87,12 @@ class Robot
                     masCercano = pedidoAux;
                     costo = costoAux;
                 }
+                delete pedidoAux;
             }
-            costoGlobal += costo;
+            if(costoGlobal == nullptr) {
+                *costoGlobal = costo;}
+            else *costoGlobal += costo;
+           
             //printSecuenciaCamino(primerPedido, masCercano, "previos");
             return masCercano;
         }
