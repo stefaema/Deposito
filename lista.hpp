@@ -34,7 +34,9 @@ public:
     string toPrint(string p);
     T suma(T i);
     int size();
-    T elemento(int indice)
+    T elemento(int indice);
+    void borrar(T elemento);
+    void borrarCabeza(void);
 };
 template <class T>
 void Lista<T>::add(T d)
@@ -99,8 +101,22 @@ int Lista<T>::size()
 template <class T> 
 T Lista<T>::elemento(int indice)
 {
-    if(indice=0){return cabeza;}
+    if(indice=0){return cabeza();}
     else return resto()->elemento(indice-1);
 };
 
+template <class T> 
+void Lista<T>::borrar(T elemento){
+    if(cabeza()==elemento) this->borrarCabeza();
+    else resto()->borrar(elemento);
+}
+
+template <class T> void Lista<T>::borrarCabeza(void)
+{ //borra el nodo cabeza
+    if (!this->esvacia()) {
+        Nodo<T>* tmp = czo;
+        czo = czo->get_next();
+        delete tmp;
+    }
+}
 #endif

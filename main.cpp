@@ -150,6 +150,6 @@ int main()
     lista_pedidos->add(new Pedido(1,160));
     Robot* robot1 = new Robot(lista_pedidos, matrizAdyacente);
 
-    cout<<robot1->devuelveCamino(getIndice(1,1,1),getIndice(8,3,15));
+    cout<<robot1->realizarPedidos();
 }
 

@@ -53,41 +53,42 @@ class Robot
 
         int devuelveCamino(int origen, int meta);
         void printSecuenciaCamino(int origen, int meta, int prev[Alcance]);
-        void realizarPedidos()
+        int realizarPedidos()
         {
             //1ro comparar caja con todos los pedidos
             //2do coparar pedido elegido con el resto
             //repetir 2 hasta hacer todos
             //volver a la caja
 
-            int* costo = 0;
-            Lista<*Pedido> ordenRealizado;
-            Lista<Pedido> pedidosPendientes = pedidos;
+            int costo = 0;
+            Lista<Pedido*>* ordenRealizado;
+            Lista<Pedido*>* pedidosPendientes = pedidos;
 
-            pedidoMasCercano(361, pedidos, costo);
+            pedidoMasCercano(360, pedidos, &costo);
 
-            for (int i = 0; i < pedidos->size(); i++)
-            {
-            }
-            
+            // for (int i = 0; i < pedidos->size(); i++)
+            // {
+            // }
+            return costo; 
         }
 
         //Devuelve el pedido que se encuentra mas cerca y actualiza el costo global
-        Pedido pedidoMasCercano(int primerPedido, Lista<Pedido> pedidosPendientes,int* costoGlobal){
+        Pedido* pedidoMasCercano(int primerPedido, Lista<Pedido*>* pedidosPendientes,int* costoGlobal){
             
-            Pedido masCercano;
+            Pedido* masCercano;
             int costo = INFINITO;
 
             for (int i = 0; i < pedidosPendientes->size(); i++)
             {
-                Pedido pedidoAux = pedidosPendientes->elemento(i);
-                int costoAux = devuelveCamino(primerPedido.lugar, pedidoAux.lugar);
+                Pedido* pedidoAux = pedidosPendientes->elemento(i);
+                int costoAux = devuelveCamino(primerPedido, pedidoAux->lugar);
                 if(costoAux < costo){
                     masCercano = pedidoAux;
                     costo = costoAux;
                 }
             }
             costoGlobal += costo;
+            //printSecuenciaCamino(primerPedido, masCercano, "previos");
             return masCercano;
         }
 
