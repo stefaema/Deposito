@@ -141,6 +141,7 @@ int Robot::devuelveCamino(int origen, int meta)
         visitados[actual] = MIEMBRO;
     }
     printSecuenciaCamino(origen, meta, previos);
+    cout << endl << endl;
     return costoPorIter[meta];
 }
 
