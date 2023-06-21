@@ -16,6 +16,9 @@ class Pedido
         lugar = index;
     }
     int getMercaderia(){return mercaderia;}
-
+    bool operator==(const Pedido& otro) const {
+        // Comparar los atributos relevantes para determinar si los pedidos son iguales
+        return lugar == otro.lugar && mercaderia == otro.mercaderia;
+    }
 };
 #endif

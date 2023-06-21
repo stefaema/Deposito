@@ -55,26 +55,34 @@ class Robot
         void printSecuenciaCamino(int origen, int meta, int prev[Alcance]);
         int realizarPedidos()
         {
-            //1ro comparar caja con todos los pedidos
-            //2do comparar pedido elegido con el resto
-            //repetir 2 hasta hacer todos
-            //volver a la caja
+            //1ro comparar caja con todos los pedidos x
+            //2do comparar pedido elegido con el resto x
+            //repetir 2 hasta hacer todos x
+            //volver a la caja x
 
             int *costo = new int();
             *costo = 0;
+
+            //lista que almacena el camino realizado comenzando por el ultimo punto recorrido
             Lista<Pedido*>* ordenRealizado;
+            //pedido en el que se encuentra actualmente el robot
             Pedido *pedidoActual = new Pedido();
+            //pedidos que todavia no se visitaron
+            Lista<Pedido*>* pedidosPendientes = pedidos->copy();
         
             for (int i = 0; i < pedidos->size(); i++)
             {
-               if(i == 0){
-                pedidoActual = pedidoMasCercano(360, pedidos, costo);
-                pedidos->borrar(pedidoActual);
-               } else{
-                pedidoActual = pedidoMasCercano(pedidoActual->lugar, pedidos, costo);
-                pedidos->borrar(pedidoActual);
-               }    
+                if(i == 0) pedidoActual = pedidoMasCercano(360, pedidosPendientes, costo);
+
+                else pedidoActual = pedidoMasCercano(pedidoActual->lugar, pedidosPendientes, costo);
+                   
+                pedidosPendientes->borrar(pedidoActual);
+                ordenRealizado->add(pedidoActual);
+                ubicacion = pedidoActual->lugar;
             }
+
+            *costo += devuelveCamino(pedidoActual->lugar, 360);
+            ubicacion = pedidoActual->lugar;
             return *costo; 
         }
 
@@ -89,13 +97,13 @@ class Robot
                 Pedido* pedidoAux = pedidosPendientes->elemento(i);
                 int costoAux = devuelveCamino(primerPedido, pedidoAux->lugar);
                 if(costoAux < costo){
-                    masCercano = pedidoAux;
+                    masCercano = new Pedido(*pedidoAux);
                     costo = costoAux;
                 }
-                delete pedidoAux;
+                //delete pedidoAux;
             }
-            if(costoGlobal == nullptr) {
-                *costoGlobal = costo;}
+
+            if(costoGlobal == nullptr) *costoGlobal = costo;
             else *costoGlobal += costo;
            
             //printSecuenciaCamino(primerPedido, masCercano, "previos");

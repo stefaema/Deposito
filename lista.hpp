@@ -37,6 +37,8 @@ public:
     T elemento(int indice);
     void borrar(T elemento);
     void borrarCabeza(void);
+    Lista<T>* copy(void);
+    void concat(Lista<T>* l1);
 };
 template <class T>
 void Lista<T>::add(T d)
@@ -109,7 +111,7 @@ template <class T>
 void Lista<T>::borrar(T elemento)
 {
     if (!esvacia()) {
-        if (cabeza() == elemento) {
+        if (*cabeza() == *elemento) {
             borrarCabeza();
         }
         else {
@@ -128,5 +130,18 @@ template <class T> void Lista<T>::borrarCabeza(void)
         czo = czo->get_next();
         delete tmp;
     }
+}
+template <class T> void Lista<T>::concat(Lista<T>* l1)
+{// le transfiere los datos de l1 a this
+    if (!(l1->esvacia())) {
+        this->concat(l1->resto());
+        this->add(l1->cabeza());
+    }
+}
+template <class T> Lista<T>* Lista<T>::copy(void)
+{
+    Lista<T>* aux = new Lista();
+    aux->concat(this);
+    return aux;
 }
 #endif
