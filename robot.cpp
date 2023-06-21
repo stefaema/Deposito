@@ -52,33 +52,35 @@ class Robot
             else cout << "No fue posible ingresar el pedido\n" << "Capacidad disponible: "<< maximo-volumenOcupado <<endl;
         }
 
-        int devuelveCamino(int origen, int meta);
+        int devuelveCamino(int origen, int meta, bool imprimir);
         void printSecuenciaCamino(int origen, int meta, int prev[Alcance]);
 
         int realizarPedidos()
         {
             int *costo = new int();
             *costo = 0;
-
+            int n =1;
             while(!pedidos->esvacia()){
-
-                Lista<Pedido*>* pedidosARealizar = new Lista<Pedido*>;
                 
-                for (int i = 0; i < pedidos->size(); i++)
-                {
-                    Pedido* pedidoAux = pedidos->elemento(i);
-                    if(comprobarVolumen(pedidoAux->mercaderia)){
-                        pedidosARealizar->add(pedidoAux);
-                        volumenOcupado+=pedidoAux->getMercaderia();
-                    }
-                }
-                *costo += realizarRecorrido(pedidosARealizar);
-                for (int i = 0; i < pedidosARealizar->size(); i++)
-                {
-                    pedidos->borrar(pedidosARealizar->elemento(i));
-                }
-                delete pedidosARealizar;
-                volumenOcupado=0;
+                cout << "Viaje numero " << n << endl;
+                //Lista<Pedido*>* pedidosARealizar = new Lista<Pedido*>;
+                
+                // for (int i = 0; i < pedidos->size(); i++)
+                // {
+                //     Pedido* pedidoAux = pedidos->elemento(i);
+                //     if(comprobarVolumen(pedidoAux->mercaderia)){
+                //         pedidosARealizar->add(pedidoAux);
+                //         volumenOcupado+=pedidoAux->getMercaderia();
+                //     }
+                // }
+                *costo += realizarRecorrido(pedidos);
+                // for (int i = 0; i < pedidosARealizar->size(); i++)
+                // {
+                //     pedidos->borrar(pedidosARealizar->elemento(i));
+                // }
+                // delete pedidosARealizar;
+                // volumenOcupado=0;
+                n++;
             }
             return *costo;
         }
@@ -112,7 +114,7 @@ class Robot
             }
 
             //volver a la caja 
-            *costo += devuelveCamino(pedidoActual->lugar, 360);
+            *costo += devuelveCamino(pedidoActual->lugar, 360, true);
             ubicacion = pedidoActual->lugar;
             return *costo; 
         }
@@ -122,22 +124,26 @@ class Robot
             
             Pedido* masCercano;
             int costo = INFINITO;
+            bool flag = false;
 
             for (int i = 0; i < pedidosPendientes->size(); i++)
             {
                 Pedido* pedidoAux = pedidosPendientes->elemento(i);
-                int costoAux = devuelveCamino(primerPedido, pedidoAux->lugar);
-                if(costoAux < costo){
+                int costoAux = devuelveCamino(primerPedido, pedidoAux->lugar,false);
+                if(costoAux < costo && comprobarVolumen(pedidoAux->mercaderia)){
                     masCercano = new Pedido(*pedidoAux);
                     costo = costoAux;
+                    flag = true;
                 }
                 //delete pedidoAux;
             }
 
-            if(costoGlobal == nullptr) *costoGlobal = costo;
-            else *costoGlobal += costo;
-           
-            //printSecuenciaCamino(primerPedido, masCercano, "previos");
+            if(flag){
+                if(costoGlobal == nullptr) *costoGlobal = costo;
+                else *costoGlobal += costo;
+                volumenOcupado += masCercano->getMercaderia();
+                devuelveCamino(primerPedido, masCercano->lugar,true);
+            }
             return masCercano;
         }
 
@@ -152,7 +158,7 @@ void Robot::printSecuenciaCamino(int origen, int meta, int prev[Alcance])
     }
 }
 
-int Robot::devuelveCamino(int origen, int meta)
+int Robot::devuelveCamino(int origen, int meta, bool imprimir)
 {
     int actual, i, k, continua, menordist, nuevadist;
     int previos[Alcance];
@@ -189,8 +195,10 @@ int Robot::devuelveCamino(int origen, int meta)
         actual = k;
         visitados[actual] = MIEMBRO;
     }
-    printSecuenciaCamino(origen, meta, previos);
-    cout << endl << endl;
+    if(imprimir) {
+        printSecuenciaCamino(origen, meta, previos);
+        cout << endl << endl;
+    }
     return costoPorIter[meta];
 }
 
