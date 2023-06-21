@@ -14,5 +14,6 @@ class Pedido
         this->mercaderia = mercaderia;
         index = lugar;
     }
+    int getMercaderia(){return mercaderia;}
 };
 #endif
