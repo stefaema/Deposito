@@ -18,6 +18,7 @@ class Robot
         int volumenOcupado = 0;
         Lista<Pedido*>* pedidos;
         int (*matrizAdyacente)[Alcance];
+        Lista<Pedido*>* ordenTotal = new Lista<Pedido*>;
 
     public:
         
@@ -53,22 +54,50 @@ class Robot
 
         int devuelveCamino(int origen, int meta);
         void printSecuenciaCamino(int origen, int meta, int prev[Alcance]);
+
         int realizarPedidos()
         {
+            int *costo = new int();
+            *costo = 0;
 
+            while(!pedidos->esvacia()){
+
+                Lista<Pedido*>* pedidosARealizar = new Lista<Pedido*>;
+                
+                for (int i = 0; i < pedidos->size(); i++)
+                {
+                    Pedido* pedidoAux = pedidos->elemento(i);
+                    if(comprobarVolumen(pedidoAux->mercaderia)){
+                        pedidosARealizar->add(pedidoAux);
+                        volumenOcupado+=pedidoAux->getMercaderia();
+                    }
+                }
+                *costo += realizarRecorrido(pedidosARealizar);
+                for (int i = 0; i < pedidosARealizar->size(); i++)
+                {
+                    pedidos->borrar(pedidosARealizar->elemento(i));
+                }
+                delete pedidosARealizar;
+                volumenOcupado=0;
+            }
+            return *costo;
+        }
+
+        int realizarRecorrido(Lista<Pedido*>* pedidosARealizar)
+        {
             int *costo = new int();
             *costo = 0;
 
             //lista que almacena el camino realizado comenzando por el ultimo punto recorrido
-            Lista<Pedido*>* ordenRealizado;
+            Lista<Pedido*>* ordenRealizado = new Lista<Pedido*>;
 
             //pedido en el que se encuentra actualmente el robot
             Pedido *pedidoActual = new Pedido();
-            
+
             //pedidos que todavia no se visitaron
-            Lista<Pedido*>* pedidosPendientes = pedidos->copy();
+            Lista<Pedido*>* pedidosPendientes = pedidosARealizar->copy();
         
-            for (int i = 0; i < pedidos->size(); i++)
+            for (int i = 0; i < pedidosARealizar->size(); i++)
             {
                 //1ro comparar caja con todos los pedidos 
                 if(i == 0) pedidoActual = pedidoMasCercano(360, pedidosPendientes, costo);

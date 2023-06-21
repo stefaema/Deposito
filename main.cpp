@@ -144,13 +144,14 @@ int main()
 
     Pedido *pedido1 = new Pedido(3,0);
     Pedido *pedido2 = new Pedido(5,1);
+    lista_pedidos->add(new Pedido(8,275));
+    lista_pedidos->add(new Pedido(5,358));
+    lista_pedidos->add(new Pedido(1,10));
 
+    lista_pedidos->add(new Pedido(1,160));
     lista_pedidos->add(pedido1);
     lista_pedidos->add(pedido2);
-    lista_pedidos->add(new Pedido(10,275));
-    // lista_pedidos->add(new Pedido(1,10));
-    // lista_pedidos->add(new Pedido(5,358));
-    // lista_pedidos->add(new Pedido(1,160));
+    
     Robot* robot1 = new Robot(lista_pedidos, matrizAdyacente);
 
     cout<<robot1->realizarPedidos()<<" pasos fueron necesarios para completar el recorrido";
