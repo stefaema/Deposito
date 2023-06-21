@@ -9,6 +9,7 @@ class Pedido
     public:
     int mercaderia;
     int lugar;
+    Pedido(){};
     Pedido(int mercaderia, int index)
     {
         this->mercaderia = mercaderia;

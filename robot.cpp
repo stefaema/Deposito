@@ -63,13 +63,17 @@ class Robot
             int *costo = new int();
             *costo = 0;
             Lista<Pedido*>* ordenRealizado;
-            Lista<Pedido*>* pedidosPendientes = pedidos;
-
-            Pedido *primerPedido = pedidoMasCercano(360, pedidos, costo);
-
+            Pedido *pedidoActual = new Pedido();
+        
             for (int i = 0; i < pedidos->size(); i++)
             {
-                
+               if(i == 0){
+                pedidoActual = pedidoMasCercano(360, pedidos, costo);
+                pedidos->borrar(pedidoActual);
+               } else{
+                pedidoActual = pedidoMasCercano(pedidoActual->lugar, pedidos, costo);
+                pedidos->borrar(pedidoActual);
+               }    
             }
             return *costo; 
         }
