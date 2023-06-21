@@ -12,7 +12,7 @@ class Pedido
     Pedido(int mercaderia, int index)
     {
         this->mercaderia = mercaderia;
-        index = lugar;
+        lugar = index;
     }
     int getMercaderia(){return mercaderia;}
 

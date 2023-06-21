@@ -144,10 +144,10 @@ int main()
 
     lista_pedidos->add(new Pedido(3,0));
     lista_pedidos->add(new Pedido(5,1));
-    lista_pedidos->add(new Pedido(10,275));
-    lista_pedidos->add(new Pedido(1,10));
-    lista_pedidos->add(new Pedido(5,358));
-    lista_pedidos->add(new Pedido(1,160));
+    // lista_pedidos->add(new Pedido(10,275));
+    // lista_pedidos->add(new Pedido(1,10));
+    // lista_pedidos->add(new Pedido(5,358));
+    // lista_pedidos->add(new Pedido(1,160));
     Robot* robot1 = new Robot(lista_pedidos, matrizAdyacente);
 
     cout<<robot1->realizarPedidos();

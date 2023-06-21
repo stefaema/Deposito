@@ -101,7 +101,7 @@ int Lista<T>::size()
 template <class T> 
 T Lista<T>::elemento(int indice)
 {
-    if(indice=0){return cabeza();}
+    if(indice==0){return cabeza();}
     else return resto()->elemento(indice-1);
 };
 
