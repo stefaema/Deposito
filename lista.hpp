@@ -105,18 +105,20 @@ T Lista<T>::elemento(int indice)
     else return resto()->elemento(indice-1);
 };
 
-template <class T> 
-void Lista<T>::borrar(T elemento){
-    if(this->cabeza() != NULL){
-        if(this->cabeza()==elemento){
-        Nodo<T>* aux = this->czo->get_next();
-        this->borrarCabeza();
-        this->czo = aux;
-        delete aux;
-    } 
-    else resto()->borrar(elemento);
+template <class T>
+void Lista<T>::borrar(T elemento)
+{
+    if (!esvacia()) {
+        if (cabeza() == elemento) {
+            borrarCabeza();
+        }
+        else {
+            Lista<T>* restoLista = resto();
+            restoLista->borrar(elemento);
+            czo->set_next(restoLista->czo);
+            delete restoLista;
+        }
     }
-    
 }
 
 template <class T> void Lista<T>::borrarCabeza(void)

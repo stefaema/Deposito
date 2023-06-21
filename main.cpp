@@ -147,8 +147,8 @@ int main()
 
     lista_pedidos->add(pedido1);
     lista_pedidos->add(pedido2);
+    lista_pedidos->add(new Pedido(10,275));
     lista_pedidos->borrar(pedido2);
-    // lista_pedidos->add(new Pedido(10,275));
     // lista_pedidos->add(new Pedido(1,10));
     // lista_pedidos->add(new Pedido(5,358));
     // lista_pedidos->add(new Pedido(1,160));
