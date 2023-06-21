@@ -15,5 +15,6 @@ class Pedido
         index = lugar;
     }
     int getMercaderia(){return mercaderia;}
+
 };
 #endif

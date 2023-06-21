@@ -1,18 +1,17 @@
 #include <iostream>
 #include <cstdlib>
-#include "Direccion.hpp"
-#include "Pedido.hpp"
 #include "Robot.cpp"
-#include "lista.hpp"
 #include <fstream>
 #include <iomanip>
+
 using namespace std;
+
 #define Alcance  361
 #define NO_MIEMBRO 0
 #define MIEMBRO 1
+
 int matrizAdyacente[Alcance][Alcance];
 char matrizMapa[Alcance];
-const int INFINITO = 1000000;
 
 int getIndice(int p, int e, int c)
 {
@@ -134,71 +133,23 @@ void printMapa()
         
     }
 }
-void printSecuenciaCamino(int origen, int meta, int prev[Alcance])
-{
-     if (meta==origen) cout<< origen<<"  ";
-   else{
-        printSecuenciaCamino(origen,prev[meta],prev);
-        cout<<meta<<"  ";
-   }
-}
-int devuelveCamino(int origen, int meta)
-{
-    int actual, i, k, continua, menordist, nuevadist;
-    int previos[Alcance];
-    int costoPorIter[Alcance];
-    int visitados[Alcance];
-    for (int i = 0; i < Alcance; i++)
-    {
-        visitados[i]=NO_MIEMBRO;
-        previos[i] = -1;
-        costoPorIter[i]=INFINITO;
-    }
-    visitados[origen]= MIEMBRO; costoPorIter[origen]=0; actual = origen; continua=1; k=0;
-    while((actual != meta)&&(continua == 1))
-    {
-        continua = 0;
-        menordist = INFINITO;
-        for(i=0; i < Alcance; i++)
-        {
-            if(visitados[i] == NO_MIEMBRO)
-            {
-                nuevadist = costoPorIter[actual]+matrizAdyacente[actual][i];
-                if(nuevadist<costoPorIter[i])
-                {
-                    costoPorIter[i]=nuevadist;
-                    previos[i]=actual; continua=1;
-                }
-                if(costoPorIter[i]<menordist)
-                {
-                    menordist = costoPorIter[i];
-                    k=i; continua=1;
-                }
-            }
-        }
-        actual = k;
-        visitados[actual] = MIEMBRO;
-    }
-    printSecuenciaCamino(origen,meta, previos);
-    return costoPorIter[meta];
-}
+
 //La caja tiene direccion (0,0,0)
 
 int main()
 {
-rellenarMatrizAdyacencia();
-hacerTxtAdy();
-Lista<Pedido*>* lista_pedidos = new Lista<Pedido*>();
+    rellenarMatrizAdyacencia();
+    hacerTxtAdy();
+    Lista<Pedido*>* lista_pedidos = new Lista<Pedido*>();
 
-lista_pedidos->add(new Pedido(3,0));
-lista_pedidos->add(new Pedido(5,1));
-lista_pedidos->add(new Pedido(10,275));
-lista_pedidos->add(new Pedido(1,10));
-lista_pedidos->add(new Pedido(5,358));
-lista_pedidos->add(new Pedido(1,160));
-Robot* robot1 = new Robot(lista_pedidos);
+    lista_pedidos->add(new Pedido(3,0));
+    lista_pedidos->add(new Pedido(5,1));
+    lista_pedidos->add(new Pedido(10,275));
+    lista_pedidos->add(new Pedido(1,10));
+    lista_pedidos->add(new Pedido(5,358));
+    lista_pedidos->add(new Pedido(1,160));
+    Robot* robot1 = new Robot(lista_pedidos, matrizAdyacente);
 
-cout<<devuelveCamino(getIndice(1,1,1),getIndice(8,3,15));
-
+    cout<<robot1->devuelveCamino(getIndice(1,1,1),getIndice(8,3,15));
 }
 

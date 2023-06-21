@@ -7,6 +7,9 @@
 #define Alcance  361
 #define NO_MIEMBRO 0
 #define MIEMBRO 1
+
+const int INFINITO = 1000000;
+
 class Robot
 {
     private:
@@ -14,18 +17,22 @@ class Robot
         int maximo;
         int volumenOcupado = 0;
         Lista<Pedido*>* pedidos;
-    
+        int (*matrizAdyacente)[Alcance];
+
     public:
         
-        Robot()
+        Robot(int matriz[Alcance][Alcance])
         {
             pedidos = new Lista<Pedido*>();
             ubicacion = 360;
             maximo = 10;
+            matrizAdyacente = matriz;
         }
-        Robot(Lista<Pedido*>* list)
+        Robot(Lista<Pedido*>* list, int matriz[Alcance][Alcance])
         {
             pedidos = list;
+            maximo = 10;
+            matrizAdyacente = matriz;
         }
 
         bool comprobarVolumen(int volumenNuevo)
@@ -48,7 +55,40 @@ class Robot
         void printSecuenciaCamino(int origen, int meta, int prev[Alcance]);
         void realizarPedidos()
         {
+            //1ro comparar caja con todos los pedidos
+            //2do coparar pedido elegido con el resto
+            //repetir 2 hasta hacer todos
+            //volver a la caja
 
+            int* costo = 0;
+            Lista<*Pedido> ordenRealizado;
+            Lista<Pedido> pedidosPendientes = pedidos;
+
+            pedidoMasCercano(361, pedidos, costo);
+
+            for (int i = 0; i < pedidos->size(); i++)
+            {
+            }
+            
+        }
+
+        //Devuelve el pedido que se encuentra mas cerca y actualiza el costo global
+        Pedido pedidoMasCercano(int primerPedido, Lista<Pedido> pedidosPendientes,int* costoGlobal){
+            
+            Pedido masCercano;
+            int costo = INFINITO;
+
+            for (int i = 0; i < pedidosPendientes->size(); i++)
+            {
+                Pedido pedidoAux = pedidosPendientes->elemento(i);
+                int costoAux = devuelveCamino(primerPedido.lugar, pedidoAux.lugar);
+                if(costoAux < costo){
+                    masCercano = pedidoAux;
+                    costo = costoAux;
+                }
+            }
+            costoGlobal += costo;
+            return masCercano;
         }
 
 };
@@ -102,4 +142,5 @@ int Robot::devuelveCamino(int origen, int meta)
     printSecuenciaCamino(origen, meta, previos);
     return costoPorIter[meta];
 }
+
 #endif

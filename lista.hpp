@@ -33,6 +33,8 @@ public:
     Lista* resto(void);
     string toPrint(string p);
     T suma(T i);
+    int size();
+    T elemento(int indice)
 };
 template <class T>
 void Lista<T>::add(T d)
@@ -87,4 +89,18 @@ T Lista<T>::suma(T i)
         return this->resto()->suma(i + this->cabeza());
     }
 };
+template <class T> 
+int Lista<T>::size()
+{
+    if (this->esvacia()) return 0;
+    return 1 + this->resto()->size();
+};
+
+template <class T> 
+T Lista<T>::elemento(int indice)
+{
+    if(indice=0){return cabeza;}
+    else return resto()->elemento(indice-1);
+};
+
 #endif
