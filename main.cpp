@@ -2,6 +2,8 @@
 #include <cstdlib>
 #include "Direccion.hpp"
 #include "Pedido.hpp"
+#include "Robot.cpp"
+#include "lista.hpp"
 #include <fstream>
 #include <iomanip>
 using namespace std;
@@ -11,35 +13,7 @@ using namespace std;
 int matrizAdyacente[Alcance][Alcance];
 char matrizMapa[Alcance];
 const int INFINITO = 1000000;
-void verif360()
-{
-    for(int i = 0; i<361;i++) 
-    {
-        if(i!=22 && matrizAdyacente[360][i]<INFINITO){cout<<"ojo "<<i<<endl;}
-    }
-}
-void printDireccion(int indice)
-{
-    if(indice != 360)
-    {
-    int pasillo;
-    int estante;
-    int celda;
-    pasillo = (indice/45);
-    estante = (indice / 15) - pasillo * 3;
-    celda = indice - pasillo * 45 - estante * 15;
-    pasillo++; celda++; estante++; 
-    std::cout<<"Pasillo: "<<pasillo<<" "<<"Estante: "<<estante<<" "<<"Celda: "<<" "<<celda<<endl;
-    }
-    else std::cout<< "Caja (0,0,0)"<<endl;
-}
-void printIndice(int pasillo, int estante, int celda)
-    {   
-        int index = (pasillo-1) * 45 + (estante-1) * 15 + celda - 1;
-        if(pasillo,estante,celda != 0) std::cout <<index<<endl;
-        //la caja es direccion (0,0,0)
-        else std::cout<<360;
-    }
+
 int getIndice(int p, int e, int c)
 {
     if(p!= 0 && e != 0 && c != 0 )
@@ -160,43 +134,6 @@ void printMapa()
         
     }
 }
-void printDirecciones(int p,int e,int c)
-{
-    cout<<"La gondola ";
-    printDireccion(getIndice(p,e,c));
-    cout<<" esta relacionada con: "<<endl;
-    for(int i = 0;i<361;i++)
-    {
-        if(matrizAdyacente[getIndice(p,e,c)][i]< INFINITO && getIndice(p,e,c) != i)
-        {
-            printDireccion(i);
-            cout<<"con un peso de: "<<matrizAdyacente[getIndice(p,e,c)][i]<<endl;
-        }
-    }
-}
-void comprobarSimetria()
-{
-    bool simetria = true;
-    for (int i = 0; i < 361; i++)
-    {
-        for (int j = 0; j < 361; j++)
-        {
-            if(matrizAdyacente[i][j] != matrizAdyacente[j][i])
-            {
-                simetria = false;
-                cout<<"ojo con ";
-                printDireccion(j);
-                cout<<"que no coincide con ";printDireccion(i);
-                cout<<endl;
-            }
-            
-            
-        }
-        
-    }
-    if(simetria)cout<<"bien ahi"<<endl;
-    else cout<<"ojoalpiojo"<<endl;
-}
 void printSecuenciaCamino(int origen, int meta, int prev[Alcance])
 {
      if (meta==origen) cout<< origen<<"  ";
@@ -245,16 +182,21 @@ int devuelveCamino(int origen, int meta)
     printSecuenciaCamino(origen,meta, previos);
     return costoPorIter[meta];
 }
-
-
-
-
 //La caja tiene direccion (0,0,0)
 
 int main()
 {
 rellenarMatrizAdyacencia();
 hacerTxtAdy();
+Lista<Pedido*>* lista_pedidos = new Lista<Pedido*>();
+
+lista_pedidos->add(new Pedido(3,0));
+lista_pedidos->add(new Pedido(5,1));
+lista_pedidos->add(new Pedido(10,275));
+lista_pedidos->add(new Pedido(1,10));
+lista_pedidos->add(new Pedido(5,358));
+lista_pedidos->add(new Pedido(1,160));
+Robot* robot1 = new Robot(lista_pedidos);
 
 cout<<devuelveCamino(getIndice(1,1,1),getIndice(8,3,15));
 

@@ -1,0 +1,66 @@
+void verif360()
+{
+    for(int i = 0; i<361;i++) 
+    {
+        if(i!=22 && matrizAdyacente[360][i]<INFINITO){cout<<"ojo "<<i<<endl;}
+    }
+}
+void printDireccion(int indice)
+{
+    if(indice != 360)
+    {
+    int pasillo;
+    int estante;
+    int celda;
+    pasillo = (indice/45);
+    estante = (indice / 15) - pasillo * 3;
+    celda = indice - pasillo * 45 - estante * 15;
+    pasillo++; celda++; estante++; 
+    std::cout<<"Pasillo: "<<pasillo<<" "<<"Estante: "<<estante<<" "<<"Celda: "<<" "<<celda<<endl;
+    }
+    else std::cout<< "Caja (0,0,0)"<<endl;
+}
+void printIndice(int pasillo, int estante, int celda)
+    {   
+        int index = (pasillo-1) * 45 + (estante-1) * 15 + celda - 1;
+        if(pasillo,estante,celda != 0) std::cout <<index<<endl;
+        //la caja es direccion (0,0,0)
+        else std::cout<<360;
+    }
+void printDirecciones(int p,int e,int c)
+{
+    cout<<"La gondola ";
+    printDireccion(getIndice(p,e,c));
+    cout<<" esta relacionada con: "<<endl;
+    for(int i = 0;i<361;i++)
+    {
+        if(matrizAdyacente[getIndice(p,e,c)][i]< INFINITO && getIndice(p,e,c) != i)
+        {
+            printDireccion(i);
+            cout<<"con un peso de: "<<matrizAdyacente[getIndice(p,e,c)][i]<<endl;
+        }
+    }
+}
+void comprobarSimetria()
+{
+    bool simetria = true;
+    for (int i = 0; i < 361; i++)
+    {
+        for (int j = 0; j < 361; j++)
+        {
+            if(matrizAdyacente[i][j] != matrizAdyacente[j][i])
+            {
+                simetria = false;
+                cout<<"ojo con ";
+                printDireccion(j);
+                cout<<"que no coincide con ";printDireccion(i);
+                cout<<endl;
+            }
+            
+            
+        }
+        
+    }
+    if(simetria)cout<<"bien ahi"<<endl;
+    else cout<<"ojoalpiojo"<<endl;
+}

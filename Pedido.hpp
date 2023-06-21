@@ -8,11 +8,11 @@ class Pedido
 {
     public:
     int mercaderia;
-    Direccion* lugar;
-    Pedido(int mercaderia, Direccion* lugar)
+    int lugar;
+    Pedido(int mercaderia, int index)
     {
         this->mercaderia = mercaderia;
-        this->lugar = lugar;
+        index = lugar;
     }
 };
 #endif
