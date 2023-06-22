@@ -3,7 +3,7 @@
 #include "Robot.cpp"
 #include <fstream>
 #include <iomanip>
-
+#include <windows.h>
 using namespace std;
 
 #define Alcance  361
@@ -23,7 +23,7 @@ int getIndice(int p, int e, int c)
 void rellenarMatrizAdyacencia()
 {
 //Por defecto todo es infinito
-cout<<"Procediendo a la completitud de la matriz de Adyacencia"<<endl;
+cout<<"Analizando la disposicion estructural del deposito (matriz de Adyacencia)"<<endl;
 for(int i = 0; i<361; i++)
 {
      for(int j = 0; j<361; j++)
@@ -34,7 +34,7 @@ for(int i = 0; i<361; i++)
     }
 }
 //Primero las celdas del medio
-std::cout<<"Rellenando las celdas centrales...";
+std::cout<<"Rellenando las celdas centrales";
     for(int pasilloAux = 1; pasilloAux <= 8; pasilloAux++)
     {
         for(int estanteAux = 1; estanteAux <= 3; estanteAux++)
@@ -48,7 +48,9 @@ std::cout<<"Rellenando las celdas centrales...";
             }
         }
     }
-std::cout<<"  \u2713 Listo"<<endl;std::cout<<"Rellenando las celdas verticales...";
+Sleep(500);cout<<dye::green(".");Sleep(500);cout<<dye::green(".");Sleep(500);cout<<dye::green(". ");
+std::cout<<dye::green("  \u2713 Listo")<<endl;
+std::cout<<"Rellenando las celdas verticales";
 //Luego las celdas verticales
 for (int i = 1; i <= 8; i++)
 {
@@ -71,8 +73,9 @@ for (int i = 1; i <= 8; i++)
 }
 //por ultimo la caja
 matrizAdyacente[360][22]=1;matrizAdyacente[22][360]=1;
+Sleep(500);cout<<dye::green(".");Sleep(500);cout<<dye::green(".");Sleep(500);cout<<dye::green(". ");std::cout<<dye::green("  \u2713 Listo")<<endl;
 
-std::cout<<"  \u2713 Listo"<<endl;std::cout<<"Matriz de Adyacencia completada (ver matrizCompleta.txt)"<<endl;
+std::cout<<"Matriz de Adyacencia completada (ver matrizCompleta.txt)\n\n";
 }
 void hacerTxtAdy()
 {   
@@ -96,31 +99,109 @@ void hacerTxtAdy()
         matrizCompleta<<"\n";
     }
 }
-
-
+Lista<Pedido*>* lista21_6()
+{   
+    Lista<Pedido*>* lista1 = new Lista<Pedido*>();
+    lista1->add(new Pedido(8,275));
+    lista1->add(new Pedido(5,358));
+    lista1->add(new Pedido(1,10));
+    lista1->add(new Pedido(6,150));
+    lista1->add(new Pedido(5,328));
+    lista1->add(new Pedido(10,20));
+    lista1->add(new Pedido(5,162));
+    lista1->add(new Pedido(2,216));
+    lista1->add(new Pedido(5,148));
+    lista1->add(new Pedido(10,20));
+    lista1->add(new Pedido(5,1));
+    lista1->add(new Pedido(2,87));
+    return lista1;
+}
+Lista<Pedido*>* lista20_6()
+{
+    Lista<Pedido*>* lista2 = new Lista<Pedido*>();
+    lista2->add(new Pedido(2,100));
+    lista2->add(new Pedido(1,200));
+    lista2->add(new Pedido(5,300));
+    lista2->add(new Pedido(3,150));
+    lista2->add(new Pedido(3,50));
+    lista2->add(new Pedido(8,89));
+    lista2->add(new Pedido(7,1));
+    lista2->add(new Pedido(2,22));
+    lista2->add(new Pedido(1,178));
+    lista2->add(new Pedido(5,287));
+    lista2->add(new Pedido(1,43));
+    lista2->add(new Pedido(9,51));
+    return lista2;
+}
+Lista<Pedido*>* lista22_6()
+{
+    Lista<Pedido*>* lista3 = new Lista<Pedido*>();
+    bool on = true;
+    cout<<"\nPanel de confeccion de orden de pedidos"<<endl;
+    while(on)
+    {
+        int cant;
+        int p,e,g;
+        int indice;
+        cout<<"Ingrese cantidad de mercaderia a extraer\n"<<endl;
+        cin>>cant;
+        if(cant>10 || cant<1){cant=1; cout<<"Dato incorrecto, se asume 1"<<endl;}
+        cout<<"Ingrese posicion: Pasillo, Estante, Gondola\n"<<endl;
+        cin>>p; 
+        if(p>8 || p<1){p=1; cout<<"Dato incorrecto, se asume 1"<<endl;}
+        cin>>e;
+        if(e>8 || e<1){e=1; cout<<"Dato incorrecto, se asume 1"<<endl;}
+        cin>>g;
+        if(g>8 || g<1){g=1; cout<<"Dato incorrecto, se asume 1"<<endl;}
+        indice = getIndice(p,e,g);
+        lista3->add(new Pedido(cant,indice));
+        cout<<"Quiere continuar agregando pedidos?[Y]/[N]\n\n";
+        char response;cin>>response;
+        if(response=='N' || response =='n')
+        {
+            on = false;
+        }
+        if(response!='Y' && response !='y' && response!='N' && response != 'n')
+        {
+            cout<<"Eran dos opciones. Se asume que si se sigue"<<endl;
+        }
+    }
+    return lista3;
+}
 //La caja tiene direccion (0,0,0)
 
 int main()
-{
+{   
+    cout<<"Panel de control de Vi100-3 \U0001F916"<<"\n\n";
+    Lista<Pedido*>* lista_pedidos;
     rellenarMatrizAdyacencia();
     hacerTxtAdy();
-    Lista<Pedido*>* lista_pedidos = new Lista<Pedido*>();
+    cout<<dye::purple("Historial de recorridos")<<endl;
+    cout<<"A\u2022 20/6/2023"<<endl;
+    cout<<"B\u2022 21/6/2023"<<endl;
+    cout<<"C\u2022 22/6/2023 (Orden en proceso)"<<endl;
+    cout<<"\nSeleccione fecha para acceder al recorrido\n";
+    char a;
+    cin>>a;
+    cout<<"\n\n";
+    switch (toupper(a))
+    {
+    case 'A':
+        lista_pedidos = lista20_6();
+        break;
+    case 'B':
+        lista_pedidos=lista21_6();
+        break;
+    case 'C':
+        lista_pedidos=lista22_6();
+        break;
+    default:
+        break;
+    }
 
-    Pedido *pedido1 = new Pedido(3,0);
-    Pedido *pedido2 = new Pedido(5,1);
-    lista_pedidos->add(new Pedido(8,275));
-    lista_pedidos->add(new Pedido(5,358));
-    lista_pedidos->add(new Pedido(1,10));
-    lista_pedidos->add(new Pedido(6,150));
-    lista_pedidos->add(new Pedido(5,328));
-    lista_pedidos->add(new Pedido(10,20));
-    lista_pedidos->add(new Pedido(5,162));
-    lista_pedidos->add(pedido1);
-    lista_pedidos->add(pedido2);
-    
     Robot* robot1 = new Robot(lista_pedidos, matrizAdyacente);
     robot1->hacerMapa();
-    cout<<robot1->realizarPedidos()<<" pasos fueron necesarios para completar el recorrido"<<endl;
+    robot1->realizarPedidos();
     robot1->printMapa();
 }
 

@@ -2,6 +2,7 @@
 #include "lista.hpp"
 #include "Pedido.hpp"
 #include "color.hpp"
+#include <windows.h>
 #ifndef ROBOT_CPP
 #define ROBOT_CPP
 #define Alcance  361
@@ -47,15 +48,18 @@ class Robot
         {
             int *costo = new int();
             *costo = 0;
-            int n =1;
+            int n = 1;
             while(!pedidos->esvacia()){
                 cout << dye::blue("Viaje numero ") << dye::blue(n) << endl;
                 int costoDelViaje = realizarRecorrido(pedidos);
                 *costo += costoDelViaje;
-                volumenOcupado=0;
+                volumenOcupado = 0;
                 n++;
-                cout << dye::light_blue("Costo del viaje: ") << dye::light_blue(costoDelViaje) << endl << endl;
+                cout << dye::light_blue("\nCosto del viaje: ") << dye::light_blue(costoDelViaje) << endl << endl;Sleep(500);
             }
+            cout<<"Recorrido finalizado."<<endl; Sleep(500);
+            cout<<"Pedidos entregados satisfactoriamente."<<endl; Sleep(500);
+            cout<<"Costo total: "<<*costo;
             return *costo;
         }
         int realizarRecorrido(Lista<Pedido*>* pedidosARealizar)
@@ -69,8 +73,8 @@ class Robot
             //pedido en el que se encuentra actualmente el robot
             Pedido *pedidoActual = new Pedido();
             Pedido *pedidoAnterior = new Pedido();
-        
-            for (int i = 0; i < pedidosARealizar->size(); i++)
+            int tamanio = pedidosARealizar->size();
+            for (int i = 0; i < tamanio; i++)
             {
                 if(pedidoActual!=NULL){
                     //1ro comparar caja con todos los pedidos 
@@ -139,7 +143,7 @@ class Robot
 {   
     cout<<"\n\t\t\t\t Mapa del recorrido del robot \n"<<endl;
     //La caja
-    cout<<"\t\t\t\t\t      "<< dye::green("\u25A0") <<endl;
+    cout<<"\t\t\t\t\t      "<< dye::red("\u25A0") <<endl;
     //El resto
     for(int i = 0; i < 360; i++)
     {
@@ -152,7 +156,7 @@ class Robot
             cout<<dye::green("\u25CF ");
             break;
         case 'R':
-            cout<<dye::green("\u25A0 ");
+            cout<<dye::aqua("\u25A0 ");
             break;
 
         default:
@@ -183,14 +187,19 @@ string devuelveDir(int indice)
 }
 void Robot::printSecuenciaCamino(int origen, int meta, int prev[Alcance])
 {
-    if (meta==origen) cout<< devuelveDir(origen);
+    if (meta==origen) {
+        if(meta==360)cout << dye::green(devuelveDir(origen));
+        else{cout<<"\n"<<dye::green(devuelveDir(meta));}
+    }
     else{
         printSecuenciaCamino(origen,prev[meta],prev);
-        cout<<" -> "<<devuelveDir(meta);
+        Sleep(50);
+        cout<<" \u279E "<<devuelveDir(meta);
         if(mapa[meta]=='V') mapa[meta]= 'R';
+        
     }
-    
 }
+
 
 int Robot::devuelveCamino(int origen, int meta, bool imprimir)
 {
@@ -231,7 +240,7 @@ int Robot::devuelveCamino(int origen, int meta, bool imprimir)
     }
     if(imprimir) {
         printSecuenciaCamino(origen, meta, previos);
-        cout << endl << endl;
+        
     }
     return costoPorIter[meta];
 }
