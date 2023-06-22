@@ -33,6 +33,12 @@ public:
     Lista* resto(void);
     string toPrint(string p);
     T suma(T i);
+    int size();
+    T elemento(int indice);
+    void borrar(T elemento);
+    void borrarCabeza(void);
+    Lista<T>* copy(void);
+    void concat(Lista<T>* l1);
 };
 template <class T>
 void Lista<T>::add(T d)
@@ -87,4 +93,55 @@ T Lista<T>::suma(T i)
         return this->resto()->suma(i + this->cabeza());
     }
 };
+template <class T> 
+int Lista<T>::size()
+{
+    if (this->esvacia()) return 0;
+    return 1 + this->resto()->size();
+};
+
+template <class T> 
+T Lista<T>::elemento(int indice)
+{
+    if(indice==0){return cabeza();}
+    else return resto()->elemento(indice-1);
+};
+
+template <class T>
+void Lista<T>::borrar(T elemento)
+{
+    if (!esvacia()) {
+        if (*cabeza() == *elemento) {
+            borrarCabeza();
+        }
+        else {
+            Lista<T>* restoLista = resto();
+            restoLista->borrar(elemento);
+            czo->set_next(restoLista->czo);
+            delete restoLista;
+        }
+    }
+}
+
+template <class T> void Lista<T>::borrarCabeza(void)
+{ //borra el nodo cabeza
+    if (!this->esvacia()) {
+        Nodo<T>* tmp = czo;
+        czo = czo->get_next();
+        delete tmp;
+    }
+}
+template <class T> void Lista<T>::concat(Lista<T>* l1)
+{// le transfiere los datos de l1 a this
+    if (!(l1->esvacia())) {
+        this->concat(l1->resto());
+        this->add(l1->cabeza());
+    }
+}
+template <class T> Lista<T>* Lista<T>::copy(void)
+{
+    Lista<T>* aux = new Lista();
+    aux->concat(this);
+    return aux;
+}
 #endif
