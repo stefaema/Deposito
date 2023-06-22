@@ -119,9 +119,8 @@ int main()
     lista_pedidos->add(pedido2);
     
     Robot* robot1 = new Robot(lista_pedidos, matrizAdyacente);
-
-    cout<<robot1->realizarPedidos()<<" pasos fueron necesarios para completar el recorrido"<<endl;
     robot1->hacerMapa();
+    cout<<robot1->realizarPedidos()<<" pasos fueron necesarios para completar el recorrido"<<endl;
     robot1->printMapa();
 }
 

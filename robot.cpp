@@ -1,7 +1,7 @@
 #include <iostream>
 #include "lista.hpp"
 #include "Pedido.hpp"
-
+#include "color.hpp"
 #ifndef ROBOT_CPP
 #define ROBOT_CPP
 #define Alcance  361
@@ -49,12 +49,12 @@ class Robot
             *costo = 0;
             int n =1;
             while(!pedidos->esvacia()){
-                cout << "Viaje numero " << n << endl;
+                cout << dye::blue("Viaje numero ") << dye::blue(n) << endl;
                 int costoDelViaje = realizarRecorrido(pedidos);
                 *costo += costoDelViaje;
                 volumenOcupado=0;
                 n++;
-                cout << "Costo del viaje: " << costoDelViaje << endl << endl;
+                cout << dye::light_blue("Costo del viaje: ") << dye::light_blue(costoDelViaje) << endl << endl;
             }
             return *costo;
         }
@@ -128,17 +128,18 @@ class Robot
             {
                 mapa[i] = 'V';
             }
-
+        //Donde hay un pedido, se pone la P
+        for(int i = 0; i< pedidos -> size(); i++)
+        {
+            mapa[pedidos->elemento(i)->lugar] = 'P';
+        }
+        
         }
         void printMapa()
-{
+{   
+    cout<<"\n\t\t\t\t Mapa del recorrido del robot \n"<<endl;
     //La caja
-    cout<<"\t\t\t\t\t      ";
-    switch(mapa[360])
-    {
-        case 'V':
-            cout<<"\u25A0"<<endl;
-    }
+    cout<<"\t\t\t\t\t      "<< dye::green("\u25A0") <<endl;
     //El resto
     for(int i = 0; i < 360; i++)
     {
@@ -147,7 +148,13 @@ class Robot
         case 'V':
             cout<<"\u25A0 ";
             break;
-        
+        case 'P':
+            cout<<dye::green("\u25CF ");
+            break;
+        case 'R':
+            cout<<dye::green("\u25A0 ");
+            break;
+
         default:
             break;
         }
@@ -159,14 +166,30 @@ class Robot
     }
 }
 };
-
+string devuelveDir(int indice)
+{
+    if(indice != 360)
+    {
+    int pasillo;
+    int estante;
+    int celda;
+    pasillo = (indice/45);
+    estante = (indice / 15) - pasillo * 3;
+    celda = indice - pasillo * 45 - estante * 15;
+    pasillo++; celda++; estante++; 
+    return ("("+to_string(pasillo) +","+ to_string(estante) +","+ to_string(celda)+")");
+    }
+    return "(0,0,0)";
+}
 void Robot::printSecuenciaCamino(int origen, int meta, int prev[Alcance])
 {
-    if (meta==origen) cout<< origen<<"  ";
+    if (meta==origen) cout<< devuelveDir(origen);
     else{
         printSecuenciaCamino(origen,prev[meta],prev);
-        cout<<meta<<"  ";
+        cout<<" -> "<<devuelveDir(meta);
+        if(mapa[meta]=='V') mapa[meta]= 'R';
     }
+    
 }
 
 int Robot::devuelveCamino(int origen, int meta, bool imprimir)
