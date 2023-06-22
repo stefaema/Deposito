@@ -150,9 +150,9 @@ Lista<Pedido*>* lista22_6()
         cin>>p; 
         if(p>8 || p<1){p=1; cout<<"Dato incorrecto, se asume 1"<<endl;}
         cin>>e;
-        if(e>8 || e<1){e=1; cout<<"Dato incorrecto, se asume 1"<<endl;}
+        if(e>3 || e<1){e=1; cout<<"Dato incorrecto, se asume 1"<<endl;}
         cin>>g;
-        if(g>8 || g<1){g=1; cout<<"Dato incorrecto, se asume 1"<<endl;}
+        if(g>15 || g<1){g=1; cout<<"Dato incorrecto, se asume 1"<<endl;}
         indice = getIndice(p,e,g);
         lista3->add(new Pedido(cant,indice));
         cout<<"Quiere continuar agregando pedidos?[Y]/[N]\n\n";

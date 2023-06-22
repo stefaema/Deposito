@@ -199,8 +199,6 @@ void Robot::printSecuenciaCamino(int origen, int meta, int prev[Alcance])
         
     }
 }
-
-
 int Robot::devuelveCamino(int origen, int meta, bool imprimir)
 {
     int actual, i, k, continua, menordist, nuevadist;
@@ -244,5 +242,4 @@ int Robot::devuelveCamino(int origen, int meta, bool imprimir)
     }
     return costoPorIter[meta];
 }
-
 #endif
