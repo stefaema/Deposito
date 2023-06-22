@@ -26,7 +26,7 @@ class Direccion
     {
         return (pasillo-1) * 45 + (estante-1) * 15 + celda - 1;
         //la caja es direccion (0,0,0)
-        if(pasillo,estante,celda == 0)
+        if(pasillo==0 && estante==0 && celda == 0)
         {
             return 360;
         }

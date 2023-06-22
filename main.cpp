@@ -146,7 +146,7 @@ Lista<Pedido*>* lista22_6()
         cout<<"Ingrese cantidad de mercaderia a extraer\n"<<endl;
         cin>>cant;
         if(cant>10 || cant<1){cant=1; cout<<"Dato incorrecto, se asume 1"<<endl;}
-        cout<<"Ingrese posicion: Pasillo, Estante, Gondola\n"<<endl;
+        cout<<"Ingrese posicion: Pasillo (entre 1 y 8), Estante (entre 1 y 3), Gondola(entre 1 y 15) \n"<<endl;
         cin>>p; 
         if(p>8 || p<1){p=1; cout<<"Dato incorrecto, se asume 1"<<endl;}
         cin>>e;
