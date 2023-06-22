@@ -140,6 +140,8 @@ int main()
 {
     rellenarMatrizAdyacencia();
     hacerTxtAdy();
+    hacerMapa();
+    printMapa();
     Lista<Pedido*>* lista_pedidos = new Lista<Pedido*>();
 
     Pedido *pedido1 = new Pedido(3,0);
@@ -147,8 +149,10 @@ int main()
     lista_pedidos->add(new Pedido(8,275));
     lista_pedidos->add(new Pedido(5,358));
     lista_pedidos->add(new Pedido(1,10));
-
-    lista_pedidos->add(new Pedido(1,160));
+    lista_pedidos->add(new Pedido(6,150));
+    lista_pedidos->add(new Pedido(5,328));
+    lista_pedidos->add(new Pedido(10,20));
+    lista_pedidos->add(new Pedido(5,162));
     lista_pedidos->add(pedido1);
     lista_pedidos->add(pedido2);
     

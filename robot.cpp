@@ -42,15 +42,6 @@ class Robot
             else return true;
         }
         
-        void ingresarPedido(Pedido* pedidoNuevo)
-        {
-            if(comprobarVolumen(pedidoNuevo->getMercaderia())){
-                pedidos->add(pedidoNuevo);
-                volumenOcupado+=pedidoNuevo->getMercaderia();
-                cout << "Pedido ingresado correctamente\n";
-            }
-            else cout << "No fue posible ingresar el pedido\n" << "Capacidad disponible: "<< maximo-volumenOcupado <<endl;
-        }
 
         int devuelveCamino(int origen, int meta, bool imprimir);
         void printSecuenciaCamino(int origen, int meta, int prev[Alcance]);
@@ -61,26 +52,12 @@ class Robot
             *costo = 0;
             int n =1;
             while(!pedidos->esvacia()){
-                
                 cout << "Viaje numero " << n << endl;
-                //Lista<Pedido*>* pedidosARealizar = new Lista<Pedido*>;
-                
-                // for (int i = 0; i < pedidos->size(); i++)
-                // {
-                //     Pedido* pedidoAux = pedidos->elemento(i);
-                //     if(comprobarVolumen(pedidoAux->mercaderia)){
-                //         pedidosARealizar->add(pedidoAux);
-                //         volumenOcupado+=pedidoAux->getMercaderia();
-                //     }
-                // }
-                *costo += realizarRecorrido(pedidos);
-                // for (int i = 0; i < pedidosARealizar->size(); i++)
-                // {
-                //     pedidos->borrar(pedidosARealizar->elemento(i));
-                // }
-                // delete pedidosARealizar;
-                // volumenOcupado=0;
+                int costoDelViaje = realizarRecorrido(pedidos);
+                *costo += costoDelViaje;
+                volumenOcupado=0;
                 n++;
+                cout << "Costo del viaje: " << costoDelViaje << endl << endl;
             }
             return *costo;
         }
@@ -95,27 +72,29 @@ class Robot
 
             //pedido en el que se encuentra actualmente el robot
             Pedido *pedidoActual = new Pedido();
-
-            //pedidos que todavia no se visitaron
-            Lista<Pedido*>* pedidosPendientes = pedidosARealizar->copy();
+            Pedido *pedidoAnterior = new Pedido();
         
             for (int i = 0; i < pedidosARealizar->size(); i++)
             {
-                //1ro comparar caja con todos los pedidos 
-                if(i == 0) pedidoActual = pedidoMasCercano(360, pedidosPendientes, costo);
+                if(pedidoActual!=NULL){
+                    //1ro comparar caja con todos los pedidos 
+                    if(i == 0 ) pedidoActual = pedidoMasCercano(360, pedidos, costo);
 
-                //2do comparar pedido elegido con el resto 
-                else pedidoActual = pedidoMasCercano(pedidoActual->lugar, pedidosPendientes, costo);
-                   
-                //borrar de pendientes, agregar a realizados, actualizar ubicacion del robot
-                pedidosPendientes->borrar(pedidoActual);
-                ordenRealizado->add(pedidoActual);
-                ubicacion = pedidoActual->lugar;
+                    //2do comparar pedido elegido con el resto 
+                    else pedidoActual = pedidoMasCercano(pedidoActual->lugar, pedidos, costo);
+                } 
+                if(pedidoActual!=NULL){
+                    //borrar de pendientes, agregar a realizados, actualizar ubicacion del robot
+                    pedidos->borrar(pedidoActual);
+                    ordenRealizado->add(pedidoActual);
+                    ubicacion = pedidoActual->lugar;
+                    pedidoAnterior = pedidoActual;             
+                }
+                
             }
-
             //volver a la caja 
-            *costo += devuelveCamino(pedidoActual->lugar, 360, true);
-            ubicacion = pedidoActual->lugar;
+            *costo += devuelveCamino(pedidoAnterior->lugar, 360, true);
+            ubicacion = pedidoAnterior->lugar;
             return *costo; 
         }
 
@@ -143,8 +122,9 @@ class Robot
                 else *costoGlobal += costo;
                 volumenOcupado += masCercano->getMercaderia();
                 devuelveCamino(primerPedido, masCercano->lugar,true);
+                return masCercano;
             }
-            return masCercano;
+            return NULL;
         }
 
 };
