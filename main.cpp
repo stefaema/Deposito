@@ -96,43 +96,7 @@ void hacerTxtAdy()
         matrizCompleta<<"\n";
     }
 }
-void hacerMapa()
-{
-//cada elemento de la matriz tendrá su propia leyenda. H sera las estanterias. V seran los casilleros disponibles
-for (int i = 0; i < 361; i++)
-{
-    matrizMapa[i] = 'V';
-}
 
-}
-void printMapa()
-{
-    //La caja
-    cout<<"\t\t\t";
-    switch(matrizMapa[360])
-    {
-        case 'V':
-            cout<<"\u25A3"<<endl;
-    }
-    //El resto
-    for(int i = 0; i < 360; i++)
-    {
-        switch (matrizMapa[i])
-        {
-        case 'V':
-            cout<<"\u25AD ";
-            break;
-        
-        default:
-            break;
-        }
-        if((i+1) % 15 == 0)
-            cout<<"  ";
-        if((i+1) %45 == 0)
-            cout<<"\n";
-        
-    }
-}
 
 //La caja tiene direccion (0,0,0)
 
@@ -140,8 +104,6 @@ int main()
 {
     rellenarMatrizAdyacencia();
     hacerTxtAdy();
-    hacerMapa();
-    printMapa();
     Lista<Pedido*>* lista_pedidos = new Lista<Pedido*>();
 
     Pedido *pedido1 = new Pedido(3,0);
@@ -158,6 +120,8 @@ int main()
     
     Robot* robot1 = new Robot(lista_pedidos, matrizAdyacente);
 
-    cout<<robot1->realizarPedidos()<<" pasos fueron necesarios para completar el recorrido";
+    cout<<robot1->realizarPedidos()<<" pasos fueron necesarios para completar el recorrido"<<endl;
+    robot1->hacerMapa();
+    robot1->printMapa();
 }
 

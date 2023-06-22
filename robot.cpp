@@ -19,6 +19,7 @@ class Robot
         Lista<Pedido*>* pedidos;
         int (*matrizAdyacente)[Alcance];
         Lista<Pedido*>* ordenTotal = new Lista<Pedido*>;
+        char mapa[Alcance];
 
     public:
         
@@ -35,17 +36,13 @@ class Robot
             maximo = 10;
             matrizAdyacente = matriz;
         }
-
         bool comprobarVolumen(int volumenNuevo)
         {
             if(volumenOcupado + volumenNuevo > maximo) return false;
             else return true;
         }
-        
-
         int devuelveCamino(int origen, int meta, bool imprimir);
         void printSecuenciaCamino(int origen, int meta, int prev[Alcance]);
-
         int realizarPedidos()
         {
             int *costo = new int();
@@ -61,7 +58,6 @@ class Robot
             }
             return *costo;
         }
-
         int realizarRecorrido(Lista<Pedido*>* pedidosARealizar)
         {
             int *costo = new int();
@@ -97,7 +93,6 @@ class Robot
             ubicacion = pedidoAnterior->lugar;
             return *costo; 
         }
-
         //Devuelve el pedido que se encuentra mas cerca y actualiza el costo global
         Pedido* pedidoMasCercano(int primerPedido, Lista<Pedido*>* pedidosPendientes,int *costoGlobal){
             
@@ -126,7 +121,43 @@ class Robot
             }
             return NULL;
         }
+        void hacerMapa()
+        {
+        //cada elemento de la matriz tendrá su propia leyenda. V seran los casilleros disponibles
+        for (int i = 0; i < 361; i++)
+            {
+                mapa[i] = 'V';
+            }
 
+        }
+        void printMapa()
+{
+    //La caja
+    cout<<"\t\t\t\t\t      ";
+    switch(mapa[360])
+    {
+        case 'V':
+            cout<<"\u25A0"<<endl;
+    }
+    //El resto
+    for(int i = 0; i < 360; i++)
+    {
+        switch (mapa[i])
+        {
+        case 'V':
+            cout<<"\u25A0 ";
+            break;
+        
+        default:
+            break;
+        }
+        if((i+1) % 15 == 0)
+            cout<<"  ";
+        if((i+1) %45 == 0)
+            cout<<"\n";
+        
+    }
+}
 };
 
 void Robot::printSecuenciaCamino(int origen, int meta, int prev[Alcance])
